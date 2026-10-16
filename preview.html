@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/bus-logo.png" />
+  <title>Bus.com — India's Unified Intercity & RTC Bus Booking</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body { font-family: 'Outfit', sans-serif; background: #F8FAFC; color: #0F172A; }
+    ::selection { background: #DC2626; color: #FFFFFF; }
+    html, body, * { -ms-overflow-style: none; scrollbar-width: none; }
+    *::-webkit-scrollbar { display: none; width: 0; height: 0; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useMemo } = React;
+
+    const CITIES = [
+      'Hyderabad', 'Bengaluru', 'Chennai', 'Vijayawada', 'Visakhapatnam', 'Tirupati',
+      'Warangal', 'Guntur', 'Kurnool', 'Nellore', 'Mumbai', 'Pune', 'Nagpur',
+      'Goa (Panaji)', 'Delhi', 'Jaipur', 'Agra', 'Chandigarh', 'Kolkata', 'Bhubaneswar'
+    ];
+
+    const POPULAR_ROUTES = [
+      { from: 'Hyderabad', to: 'Bengaluru', price: 999, time: '8h 15m' },
+      { from: 'Bengaluru', to: 'Chennai', price: 549, time: '5h 45m' },
+      { from: 'Hyderabad', to: 'Vijayawada', price: 499, time: '4h 30m' },
+      { from: 'Mumbai', to: 'Pune', price: 349, time: '3h 10m' },
+      { from: 'Delhi', to: 'Jaipur', price: 449, time: '4h 50m' }
+    ];
+
+    const SAMPLE_BUSES = [
+      {
+        id: 'BUS-KSR-101',
+        name: 'KSRTC Airavat Club Class',
+        operatorTag: 'Govt. of Karnataka RTC',
+        type: 'Volvo 9600 Multi-Axle AC Sleeper (2+1)',
+        serviceType: 'RTC',
+        departureTime: '21:30',
+        arrivalTime: '05:45',
+        duration: '08h 15m',
+        price: 1199,
+        originalPrice: 1499,
+        rating: 4.8,
+        reviewsCount: 3420,
+        availableSeats: 16,
+        busNumber: 'KA 57 F 4102',
+        amenities: ['Starlink Wi-Fi', 'Fresh Blanket & Pillow', '65W USB-C', 'GPS Tracking']
+      },
+      {
+        id: 'BUS-APS-102',
+        name: 'APSRTC Amaravati Premier',
+        operatorTag: 'Govt. of Andhra Pradesh RTC',
+        type: 'Scania Multi-Axle AC Sleeper (2+1)',
+        serviceType: 'RTC',
+        departureTime: '22:15',
+        arrivalTime: '06:15',
+        duration: '08h 00m',
+        price: 1149,
+        originalPrice: 1399,
+        rating: 4.8,
+        reviewsCount: 4210,
+        availableSeats: 12,
+        busNumber: 'AP 39 Z 9921',
+        amenities: ['High Speed Wi-Fi', 'Air Purifier', 'USB-C Charging', 'Emergency SOS']
+      },
+      {
+        id: 'BUS-TSR-103',
+        name: 'TSRTC Garuda Plus Luxury',
+        operatorTag: 'Govt. of Telangana RTC',
+        type: 'Volvo B11R Multi-Axle AC Sleeper (2+1)',
+        serviceType: 'RTC',
+        departureTime: '20:45',
+        arrivalTime: '05:00',
+        duration: '08h 15m',
+        price: 1099,
+        originalPrice: 1349,
+        rating: 4.7,
+        reviewsCount: 3120,
+        availableSeats: 18,
+        busNumber: 'TS 09 Z 4410',
+        amenities: ['Complimentary Water', 'USB Charging', 'Live GPS Tracking']
+      },
+      {
+        id: 'BUS-VRL-104',
+        name: 'VRL Travels I-Shift Executive',
+        operatorTag: 'National Premier Fleet',
+        type: 'Volvo 9600 AC Sleeper (2+1 Wide Berth)',
+        serviceType: 'Private',
+        departureTime: '22:45',
+        arrivalTime: '06:45',
+        duration: '08h 00m',
+        price: 1299,
+        originalPrice: 1599,
+        rating: 4.9,
+        reviewsCount: 5120,
+        availableSeats: 14,
+        busNumber: 'KA 01 F 8820',
+        amenities: ['Private TV Screen', 'Fast Wi-Fi', 'Fresh Bedding', 'Lounge Boarding']
+      },
+      {
+        id: 'BUS-ZNG-105',
+        name: 'Zingbus Electric Plus',
+        operatorTag: 'Zero Emission EV',
+        type: '100% Electric Luxury AC Sleeper',
+        serviceType: 'Private',
+        departureTime: '21:00',
+        arrivalTime: '05:15',
+        duration: '08h 15m',
+        price: 999,
+        originalPrice: 1249,
+        rating: 4.9,
+        reviewsCount: 2980,
+        availableSeats: 20,
+        busNumber: 'DL 01 B 3341',
+        amenities: ['Silent EV Drive', 'Starlink Wi-Fi', 'Guaranteed On-Time']
+      }
+    ];
+
+    const SEATS_GRID = {
+      lower: ['L1','L2','L3','L4','L5','L6','L7','L8','L9','L10','L11','L12'],
+      upper: ['U1','U2','U3','U4','U5','U6','U7','U8','U9','U10','U11','U12']
+    };
+
+    function App() {
+      const todayIso = new Date().toISOString().split('T')[0];
+      const [step, setStep] = useState('home');
+      const [search, setSearch] = useState({ from: '', to: '', date: todayIso });
+      const [filterType, setFilterType] = useState('All');
+      const [activeBus, setActiveBus] = useState(SAMPLE_BUSES[0]);
+      const [deck, setDeck] = useState('lower');
+      const [selectedSeats, setSelectedSeats] = useState([]);
+      const [passengers, setPassengers] = useState([]);
+      const [contact, setContact] = useState({ email: '', phone: '' });
+      const [formError, setFormError] = useState('');
+      const [booking, setBooking] = useState(null);
+      const [user, setUser] = useState(null);
+      const [showAuth, setShowAuth] = useState(false);
+
+      const buses = useMemo(() => {
+        if (filterType === 'All') return SAMPLE_BUSES;
+        if (filterType === 'RTC') return SAMPLE_BUSES.filter(b => b.serviceType === 'RTC');
+        return SAMPLE_BUSES.filter(b => b.serviceType === 'Private');
+      }, [filterType]);
+
+      const startSeatSelection = (bus) => {
+        setActiveBus(bus);
+        setSelectedSeats([]);
+        setStep('seats');
+        window.scrollTo(0, 0);
+      };
+
+      const toggleSeat = (seatId) => {
+        setSelectedSeats(prev =>
+          prev.includes(seatId) ? prev.filter(s => s !== seatId) : prev.length < 6 ? [...prev, seatId] : prev
+        );
+      };
+
+      const goToCheckout = () => {
+        setPassengers(selectedSeats.map(s => ({ seat: s, name: '', age: '', gender: 'Male' })));
+        setStep('checkout');
+        window.scrollTo(0, 0);
+      };
+
+      const handleCompleteBooking = (e) => {
+        e.preventDefault();
+        for (const p of passengers) {
+          if (!p.name.trim() || !p.age) {
+            setFormError('Please enter all traveler names and ages.');
+            return;
+          }
+        }
+        if (!contact.email.includes('@') || contact.phone.length < 10) {
+          setFormError('Please provide a valid email and 10-digit mobile number.');
+          return;
+        }
+        setFormError('');
+        const total = Math.round(selectedSeats.length * activeBus.price * 1.05);
+        setBooking({
+          pnr: 'BUS' + Math.floor(100000 + Math.random() * 900000),
+          bus: activeBus,
+          search,
+          passengers,
+          contact,
+          total
+        });
+        setStep('confirmation');
+        window.scrollTo(0, 0);
+      };
+
+      return (
+        <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+          {/* Header */}
+          <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200">
+            <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+              {/* Bus.com Logo */}
+              <button onClick={() => setStep('home')} className="flex items-center gap-2.5 cursor-pointer select-none">
+                <img src="/bus-logo.png" alt="Bus.com" className="h-9 w-9 object-contain shrink-0" />
+                <div className="text-left">
+                  <span className="text-xl font-black text-slate-900">Bus<span className="text-red-600">.com</span></span>
+                  <span className="ml-1 text-[9px] font-black uppercase text-slate-500 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded">India</span>
+                </div>
+              </button>
+
+              <div className="hidden md:flex items-center gap-2 text-xs font-bold text-slate-400">
+                <span className={step === 'home' ? 'text-slate-900' : ''}>1. Search</span> →
+                <span className={step === 'seats' ? 'text-slate-900' : ''}>2. Seats</span> →
+                <span className={step === 'checkout' ? 'text-slate-900' : ''}>3. Traveler</span> →
+                <span className={step === 'confirmation' ? 'text-red-600' : ''}>4. Ticket</span>
+              </div>
+
+              <div>
+                {user ? (
+                  <span className="text-xs font-bold bg-slate-100 text-slate-900 px-3 py-1.5 rounded-xl">👤 {user.name}</span>
+                ) : (
+                  <button onClick={() => setShowAuth(true)} className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-red-600 text-white text-xs font-bold transition-colors cursor-pointer">
+                    Sign In
+                  </button>
+                )}
+              </div>
+            </div>
+          </header>
+
+          {step === 'home' && (
+            <>
+              {/* Cool Hero Section (Showcase only, no input form inside) */}
+              <section className="bg-slate-950 text-white min-h-[calc(100vh-4rem)] flex flex-col justify-between py-8 sm:py-10 px-4">
+                <div className="max-w-6xl mx-auto w-full flex-1 flex flex-col justify-between">
+                  <div className="my-auto py-4">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-semibold text-slate-300 mb-4">
+                      <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
+                      <span>Official Partner • KSRTC, APSRTC, TSRTC & National Fleets</span>
+                    </div>
+
+                    <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-[1.08]">
+                      India’s Interstate Bus Network.{' '}
+                      <span className="text-red-500">Unified & Live.</span>
+                    </h1>
+
+                    <p className="mt-4 text-base sm:text-lg text-slate-400 max-w-2xl font-normal leading-relaxed">
+                      Book state government RTCs (KSRTC Airavat, APSRTC Amaravati, TSRTC Garuda Plus)
+                      and verified national private coaches across 60+ major corridors with instant e-tickets.
+                    </p>
+
+                    <div className="mt-6 flex flex-wrap items-center gap-4">
+                      <button
+                        onClick={() => document.getElementById('search-portal').scrollIntoView({ behavior: 'smooth' })}
+                        className="px-6 py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-sm shadow-lg shadow-red-600/25 transition-all cursor-pointer"
+                      >
+                        Search All Bus Routes ↓
+                      </button>
+                      <span className="text-xs font-bold text-slate-400">• Zero Cancellation Fees on Select RTCs</span>
+                    </div>
+                  </div>
+
+                  {/* 4 Clean Stats - Anchored at the bottom edge of the viewport */}
+                  <div className="pt-4 pb-2 grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+                    <div className="bg-white/5 border border-white/10 p-5 rounded-2xl">
+                      <span className="text-2xl sm:text-3xl font-black text-white">36+</span>
+                      <p className="text-xs font-bold text-slate-300 mt-1">State RTCs & Fleets</p>
+                    </div>
+                    <div className="bg-white/5 border border-white/10 p-5 rounded-2xl">
+                      <span className="text-2xl sm:text-3xl font-black text-white">12,400+</span>
+                      <p className="text-xs font-bold text-slate-300 mt-1">Daily Intercity Routes</p>
+                    </div>
+                    <div className="bg-white/5 border border-white/10 p-5 rounded-2xl">
+                      <span className="text-2xl sm:text-3xl font-black text-white">4.8★</span>
+                      <p className="text-xs font-bold text-slate-300 mt-1">Verified Traveler Score</p>
+                    </div>
+                    <div className="bg-white/5 border border-white/10 p-5 rounded-2xl">
+                      <span className="text-2xl sm:text-3xl font-black text-white">99.4%</span>
+                      <p className="text-xs font-bold text-slate-300 mt-1">On-Time SLA</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Booking Portal (Placed cleanly after the hero with generous breathing space) */}
+              <section id="search-portal" className="max-w-6xl mx-auto px-4 pt-10 pb-6 relative z-30 w-full">
+                <div className="bg-white text-slate-900 p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-200">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-slate-100">
+                    <div>
+                      <span className="text-[11px] font-black uppercase text-red-600">Booking Engine</span>
+                      <h2 className="text-xl font-black text-slate-900">Direct Route & Schedule Search</h2>
+                    </div>
+                    <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
+                      {['All', 'RTC', 'Private'].map(t => (
+                        <button
+                          key={t}
+                          onClick={() => setFilterType(t)}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${filterType === t ? 'bg-slate-900 text-white shadow-xs' : 'text-slate-600'}`}
+                        >
+                          {t === 'RTC' ? 'State RTCs' : t}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                    <div>
+                      <label className="text-[11px] font-black uppercase text-slate-400">Leaving From</label>
+                      <select value={search.from} onChange={e => setSearch({...search, from: e.target.value})} className="w-full mt-1.5 p-3 rounded-xl bg-slate-50 border border-slate-200 font-bold text-sm focus:outline-none">
+                        {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-[11px] font-black uppercase text-slate-400">Going To</label>
+                      <select value={search.to} onChange={e => setSearch({...search, to: e.target.value})} className="w-full mt-1.5 p-3 rounded-xl bg-slate-50 border border-slate-200 font-bold text-sm focus:outline-none">
+                        {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-[11px] font-black uppercase text-slate-400">Departure Date</label>
+                      <input type="date" value={search.date} onChange={e => setSearch({...search, date: e.target.value})} className="w-full mt-1.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200 font-bold text-sm focus:outline-none" />
+                    </div>
+                    <button
+                      onClick={() => document.getElementById('buses-list').scrollIntoView({ behavior: 'smooth' })}
+                      className="w-full py-3.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-sm shadow-md shadow-red-600/20 transition-all cursor-pointer"
+                    >
+                      Search Live Coaches
+                    </button>
+                  </div>
+                </div>
+              </section>
+
+              {/* Bus Results List */}
+              <section id="buses-list" className="max-w-6xl mx-auto px-4 py-16 w-full">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-2xl font-black text-slate-900">{search.from} → {search.to} Coaches</h2>
+                    <p className="text-xs text-slate-500 font-semibold">{buses.length} verified state RTC and private coaches for {search.date}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  {buses.map(bus => (
+                    <div key={bus.id} className="bg-white rounded-3xl border border-slate-200 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xs hover:shadow-lg transition-all">
+                      <div>
+                        <span className={`text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full border ${bus.serviceType === 'RTC' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-slate-100 text-slate-800 border-slate-200'}`}>
+                          {bus.operatorTag}
+                        </span>
+                        <h3 className="text-xl font-black text-slate-900 mt-1">{bus.name}</h3>
+                        <p className="text-xs text-slate-500 font-semibold">{bus.type} • <span className="font-mono">{bus.busNumber}</span></p>
+                        <div className="flex flex-wrap gap-1.5 mt-3">
+                          {bus.amenities.map(a => <span key={a} className="text-[11px] bg-slate-100 px-2.5 py-0.5 rounded-md font-semibold text-slate-600">{a}</span>)}
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-6 bg-slate-50 px-5 py-3 rounded-2xl border border-slate-200">
+                        <div>
+                          <p className="text-xl font-black text-slate-900">{bus.departureTime}</p>
+                          <p className="text-xs text-slate-500 font-bold">{search.from}</p>
+                        </div>
+                        <div className="text-center text-xs font-bold text-slate-400">
+                          {bus.duration}
+                          <div className="w-16 h-0.5 bg-slate-300 my-1" />
+                        </div>
+                        <div>
+                          <p className="text-xl font-black text-slate-900">{bus.arrivalTime}</p>
+                          <p className="text-xs text-slate-500 font-bold">{search.to}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex md:flex-col items-center md:items-end justify-between w-full md:w-auto gap-3">
+                        <div className="text-right">
+                          <span className="text-xs text-slate-400 line-through font-semibold mr-1.5">₹{bus.originalPrice}</span>
+                          <span className="text-2xl font-black text-slate-900">₹{bus.price}</span>
+                          <p className="text-xs font-black text-red-600">{bus.availableSeats} Berths Left</p>
+                        </div>
+                        <button
+                          onClick={() => startSeatSelection(bus)}
+                          className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black shadow-sm transition-all cursor-pointer"
+                        >
+                          Select Seats →
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </>
+          )}
+
+          {step === 'seats' && (
+            <div className="max-w-6xl mx-auto px-4 py-8 w-full">
+              <button onClick={() => setStep('home')} className="text-xs font-bold text-slate-600 hover:text-red-600 mb-4 cursor-pointer">← Back to Search</button>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div className="lg:col-span-7 bg-white p-6 rounded-3xl border border-slate-200">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-xl font-black">{activeBus.name} Berths</h2>
+                    <div className="flex gap-1 bg-slate-100 p-1 rounded-xl">
+                      {['lower', 'upper'].map(d => (
+                        <button key={d} onClick={() => setDeck(d)} className={`px-3 py-1.5 rounded-lg text-xs font-black capitalize cursor-pointer ${deck === d ? 'bg-slate-900 text-white' : 'text-slate-600'}`}>{d} Deck</button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 max-w-sm mx-auto bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                    {SEATS_GRID[deck].map(seatId => {
+                      const selected = selectedSeats.includes(seatId);
+                      return (
+                        <button
+                          key={seatId}
+                          onClick={() => toggleSeat(seatId)}
+                          className={`h-24 rounded-2xl border-2 font-black text-sm flex flex-col items-center justify-center gap-1 transition-all ${
+                            selected ? 'bg-red-600 border-red-600 text-white shadow-md' : 'bg-white border-slate-300 hover:border-red-600 text-slate-900'
+                          }`}
+                        >
+                          <span>{seatId}</span>
+                          <span className="text-[11px] font-semibold opacity-80">₹{activeBus.price}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="lg:col-span-5 bg-slate-900 text-white p-6 rounded-3xl space-y-4">
+                  <h3 className="text-lg font-black">Fare Summary</h3>
+                  <p className="text-xs text-slate-400">{search.from} → {search.to} • {search.date}</p>
+                  <div className="pt-3 border-t border-white/10">
+                    <span className="text-xs text-slate-400 font-bold">Selected Berths:</span>
+                    <p className="text-base font-black text-red-500 mt-1">{selectedSeats.length ? selectedSeats.join(', ') : 'None selected'}</p>
+                  </div>
+                  <div className="pt-3 border-t border-white/10 flex justify-between items-baseline">
+                    <span className="text-sm font-bold">Total Fare</span>
+                    <span className="text-2xl font-black text-white">₹{selectedSeats.length * activeBus.price}</span>
+                  </div>
+                  <button
+                    disabled={!selectedSeats.length}
+                    onClick={goToCheckout}
+                    className={`w-full py-3.5 rounded-xl font-black text-sm transition-all ${selectedSeats.length ? 'bg-red-600 hover:bg-red-700 text-white cursor-pointer shadow-lg shadow-red-600/30' : 'bg-white/10 text-slate-500 cursor-not-allowed'}`}
+                  >
+                    Continue to Traveler Info →
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {step === 'checkout' && (
+            <form onSubmit={handleCompleteBooking} className="max-w-4xl mx-auto px-4 py-8 w-full space-y-6">
+              <button type="button" onClick={() => setStep('seats')} className="text-xs font-bold text-slate-600 hover:text-red-600 cursor-pointer">← Back to Seat Selection</button>
+              <h2 className="text-2xl font-black">Traveler Information</h2>
+              {formError && <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-xs font-bold">{formError}</div>}
+
+              <div className="bg-white p-6 rounded-3xl border border-slate-200 space-y-4">
+                {passengers.map((p, idx) => (
+                  <div key={p.seat} className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-50">
+                    <input
+                      type="text"
+                      placeholder={`Traveler ${idx + 1} Name (Berth ${p.seat})`}
+                      value={p.name}
+                      onChange={e => {
+                        const next = [...passengers];
+                        next[idx].name = e.target.value;
+                        setPassengers(next);
+                      }}
+                      className="p-2.5 rounded-xl border border-slate-300 bg-white text-sm font-semibold"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Age"
+                      value={p.age}
+                      onChange={e => {
+                        const next = [...passengers];
+                        next[idx].age = e.target.value;
+                        setPassengers(next);
+                      }}
+                      className="p-2.5 rounded-xl border border-slate-300 bg-white text-sm font-semibold"
+                    />
+                    <select
+                      value={p.gender}
+                      onChange={e => {
+                        const next = [...passengers];
+                        next[idx].gender = e.target.value;
+                        setPassengers(next);
+                      }}
+                      className="p-2.5 rounded-xl border border-slate-300 bg-white text-sm font-semibold"
+                    >
+                      <option>Male</option>
+                      <option>Female</option>
+                    </select>
+                  </div>
+                ))}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3">
+                  <input
+                    type="email"
+                    placeholder="Email for E-Ticket"
+                    value={contact.email}
+                    onChange={e => setContact({...contact, email: e.target.value})}
+                    className="p-3 rounded-xl border border-slate-300 text-sm font-semibold"
+                  />
+                  <input
+                    type="tel"
+                    maxLength={10}
+                    placeholder="10-Digit Mobile Number"
+                    value={contact.phone}
+                    onChange={e => setContact({...contact, phone: e.target.value})}
+                    className="p-3 rounded-xl border border-slate-300 text-sm font-semibold"
+                  />
+                </div>
+              </div>
+
+              <button type="submit" className="w-full py-4 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-black text-base shadow-lg shadow-red-600/25 cursor-pointer">
+                Confirm & Generate Official Ticket (₹{Math.round(selectedSeats.length * activeBus.price * 1.05)})
+              </button>
+            </form>
+          )}
+
+          {step === 'confirmation' && booking && (
+            <div className="max-w-2xl mx-auto px-4 py-10 w-full">
+              <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+                <div className="bg-slate-950 text-white p-6 text-center border-b border-slate-800">
+                  <span className="text-xs font-bold uppercase tracking-widest text-red-500">Official Boarding Pass</span>
+                  <h2 className="text-3xl font-black mt-1">PNR: {booking.pnr}</h2>
+                  <p className="text-xs text-slate-400 mt-1">{booking.bus.name} • {booking.bus.type}</p>
+                </div>
+                <div className="p-6 space-y-4 text-sm">
+                  <div className="flex justify-between font-black">
+                    <span>{booking.search.from} ({booking.bus.departureTime})</span>
+                    <span>→</span>
+                    <span>{booking.search.to} ({booking.bus.arrivalTime})</span>
+                  </div>
+                  <div className="border-t border-slate-100 pt-3">
+                    <span className="text-xs font-bold text-slate-400 uppercase">Passengers & Seats</span>
+                    {booking.passengers.map((p, i) => (
+                      <div key={i} className="flex justify-between py-1 font-semibold">
+                        <span>{p.name} ({p.age}, {p.gender})</span>
+                        <span className="text-red-600 font-black">Berth {p.seat}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="border-t border-slate-100 pt-3 flex justify-between items-baseline">
+                    <span className="font-bold">Total Paid</span>
+                    <span className="text-2xl font-black text-slate-900">₹{booking.total}</span>
+                  </div>
+                  <button onClick={() => setStep('home')} className="w-full mt-4 py-3 rounded-xl bg-slate-900 hover:bg-red-600 text-white font-bold text-xs cursor-pointer transition-colors">
+                    Book Another Journey
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Auth Dialog */}
+          {showAuth && (
+            <div className="fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-4">
+              <div className="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 border border-slate-200">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-black">Sign in to Bus.com</h3>
+                  <button onClick={() => setShowAuth(false)} className="text-sm font-bold px-2.5 py-1 rounded-lg bg-slate-100 cursor-pointer">✕</button>
+                </div>
+                <button
+                  onClick={() => { setUser({ name: 'Ramesh Kumar' }); setShowAuth(false); }}
+                  className="w-full py-3 rounded-xl bg-red-600 text-white font-black text-xs cursor-pointer"
+                >
+                  Continue as Ramesh Kumar (Instant Demo)
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Floating Scroll to Top */}
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            title="Scroll to top"
+            className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center text-lg shadow-2xl border border-slate-700/60 hover:bg-red-600 hover:border-red-500 transition-all cursor-pointer"
+          >
+            ↑
+          </button>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
