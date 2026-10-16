@@ -285,6 +285,93 @@
                 </div>
               </section>
 
+              {/* Special Offers Section (With the same dark background) */}
+              <section className="bg-slate-950 text-white py-14 border-t border-slate-900 w-full px-4">
+                <div className="max-w-6xl mx-auto">
+                  <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+                    <div>
+                      <span className="text-[11px] font-black uppercase tracking-widest text-red-500 block mb-1">
+                        Special Offers
+                      </span>
+                      <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                        A better trip, for less.
+                      </h2>
+                      <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                        Pick an offer, copy the coupon code, and get ready for your next adventure.
+                      </p>
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-slate-300">
+                      ★ Travel more, save more
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-slate-900 rounded-3xl border border-slate-800 overflow-hidden flex flex-col justify-between shadow-xl">
+                      <div className="p-6 bg-gradient-to-br from-emerald-700 to-teal-800 text-white">
+                        <span className="text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-black/25"># Bus.com offer</span>
+                        <div className="text-3xl font-black mt-4">10% OFF</div>
+                        <div className="text-xs font-bold text-white/90">Your first journey</div>
+                      </div>
+                      <div className="p-6 space-y-4">
+                        <p className="text-xs text-slate-300">Get 10% off your first bus booking.</p>
+                        <p className="text-[11px] text-slate-500 font-semibold">Maximum discount ₹150</p>
+                        <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+                          <div>
+                            <span className="text-[10px] font-black text-slate-500 block uppercase">Coupon Code</span>
+                            <span className="font-mono font-black text-sm text-white">FIRSTBUS</span>
+                          </div>
+                          <button onClick={() => navigator.clipboard?.writeText('FIRSTBUS')} className="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer">
+                            Copy code
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-900 rounded-3xl border border-slate-800 overflow-hidden flex flex-col justify-between shadow-xl">
+                      <div className="p-6 bg-gradient-to-br from-violet-700 to-purple-900 text-white">
+                        <span className="text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-black/25"># Bus.com offer</span>
+                        <div className="text-3xl font-black mt-4">₹100 OFF</div>
+                        <div className="text-xs font-bold text-white/90">A little travel bonus</div>
+                      </div>
+                      <div className="p-6 space-y-4">
+                        <p className="text-xs text-slate-300">Save ₹100 on an eligible bus ticket.</p>
+                        <p className="text-[11px] text-slate-500 font-semibold">Minimum booking ₹799</p>
+                        <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+                          <div>
+                            <span className="text-[10px] font-black text-slate-500 block uppercase">Coupon Code</span>
+                            <span className="font-mono font-black text-sm text-white">ROUTE100</span>
+                          </div>
+                          <button onClick={() => navigator.clipboard?.writeText('ROUTE100')} className="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer">
+                            Copy code
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-900 rounded-3xl border border-slate-800 overflow-hidden flex flex-col justify-between shadow-xl">
+                      <div className="p-6 bg-gradient-to-br from-red-600 to-rose-700 text-white">
+                        <span className="text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-black/25"># Bus.com offer</span>
+                        <div className="text-3xl font-black mt-4">15% OFF</div>
+                        <div className="text-xs font-bold text-white/90">Weekend getaway</div>
+                      </div>
+                      <div className="p-6 space-y-4">
+                        <p className="text-xs text-slate-300">Enjoy a discount on your next weekend trip.</p>
+                        <p className="text-[11px] text-slate-500 font-semibold">Maximum discount ₹200</p>
+                        <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+                          <div>
+                            <span className="text-[10px] font-black text-slate-500 block uppercase">Coupon Code</span>
+                            <span className="font-mono font-black text-sm text-white">WEEKEND</span>
+                          </div>
+                          <button onClick={() => navigator.clipboard?.writeText('WEEKEND')} className="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer">
+                            Copy code
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
               {/* Booking Portal (Placed cleanly after the hero with generous breathing space) */}
               <section id="search-portal" className="max-w-6xl mx-auto px-4 pt-10 pb-6 relative z-30 w-full">
                 <div className="bg-white text-slate-900 p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-200">

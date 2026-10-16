@@ -50,7 +50,15 @@ export default function PassengerCheckout({
 
   const handleApplyPromo = () => {
     const code = promoInput.trim().toUpperCase();
-    if (code === 'BUSCOM15' || code === 'RTCFIRST' || code === 'FIRSTBUS') {
+    if (code === 'FIRSTBUS') {
+      const discount = Math.min(150, Math.round(baseFare * 0.10)) || 150;
+      setAppliedPromo({ code, discount });
+    } else if (code === 'ROUTE100') {
+      setAppliedPromo({ code, discount: 100 });
+    } else if (code === 'WEEKEND') {
+      const discount = Math.min(200, Math.round(baseFare * 0.15)) || 180;
+      setAppliedPromo({ code, discount });
+    } else if (code === 'BUSCOM15' || code === 'RTCFIRST') {
       setAppliedPromo({ code, discount: 200 });
     } else {
       setAppliedPromo({ code: 'INVALID', discount: 0 });

@@ -11,6 +11,7 @@ import BookingConfirmation from './components/BookingConfirmation';
 import AuthModal from './components/AuthModal';
 import BusLogo from './components/BusLogo';
 import ScrollToTop from './components/ScrollToTop';
+import SpecialOffers from './components/SpecialOffers';
 import { getBusesForRoute } from './data/busesData';
 import { Filter, ArrowUpDown, Bus, X } from 'lucide-react';
 
@@ -166,7 +167,10 @@ export default function App() {
               onExploreClick={scrollToBookingPortal}
             />
 
-            {/* Booking Portal Widget Docked Right After Hero */}
+            {/* Special Offers Section (With the same dark background) */}
+            <SpecialOffers />
+
+            {/* Booking Portal Widget Docked Right After */}
             <BookingPortal
               searchParams={searchParams}
               onUpdateSearch={setSearchParams}
