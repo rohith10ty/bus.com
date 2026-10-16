@@ -285,8 +285,8 @@
                 </div>
               </section>
 
-              {/* Special Offers Section (With the same dark background) */}
-              <section className="bg-slate-950 text-white py-14 border-t border-slate-900 w-full px-4">
+              {/* Special Offers Section (Seamless uniform dark background) */}
+              <section className="bg-slate-950 text-white pt-6 pb-16 w-full px-4">
                 <div className="max-w-6xl mx-auto">
                   <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
                     <div>
@@ -306,8 +306,9 @@
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Card 1: Sapphire Blue */}
                     <div className="bg-slate-900 rounded-3xl border border-slate-800 overflow-hidden flex flex-col justify-between shadow-xl">
-                      <div className="p-6 bg-gradient-to-br from-emerald-700 to-teal-800 text-white">
+                      <div className="p-6 bg-gradient-to-br from-blue-600 via-indigo-600 to-sky-700 text-white">
                         <span className="text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-black/25"># Bus.com offer</span>
                         <div className="text-3xl font-black mt-4">10% OFF</div>
                         <div className="text-xs font-bold text-white/90">Your first journey</div>
@@ -320,15 +321,16 @@
                             <span className="text-[10px] font-black text-slate-500 block uppercase">Coupon Code</span>
                             <span className="font-mono font-black text-sm text-white">FIRSTBUS</span>
                           </div>
-                          <button onClick={() => navigator.clipboard?.writeText('FIRSTBUS')} className="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer">
+                          <button onClick={() => navigator.clipboard?.writeText('FIRSTBUS')} className="px-3.5 py-2 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white border border-blue-500/40 cursor-pointer transition-colors">
                             Copy code
                           </button>
                         </div>
                       </div>
                     </div>
 
+                    {/* Card 2: Sunset Amber */}
                     <div className="bg-slate-900 rounded-3xl border border-slate-800 overflow-hidden flex flex-col justify-between shadow-xl">
-                      <div className="p-6 bg-gradient-to-br from-violet-700 to-purple-900 text-white">
+                      <div className="p-6 bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 text-white">
                         <span className="text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-black/25"># Bus.com offer</span>
                         <div className="text-3xl font-black mt-4">₹100 OFF</div>
                         <div className="text-xs font-bold text-white/90">A little travel bonus</div>
@@ -341,15 +343,16 @@
                             <span className="text-[10px] font-black text-slate-500 block uppercase">Coupon Code</span>
                             <span className="font-mono font-black text-sm text-white">ROUTE100</span>
                           </div>
-                          <button onClick={() => navigator.clipboard?.writeText('ROUTE100')} className="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer">
+                          <button onClick={() => navigator.clipboard?.writeText('ROUTE100')} className="px-3.5 py-2 rounded-xl text-xs font-bold bg-amber-600 hover:bg-amber-500 text-white border border-amber-500/40 cursor-pointer transition-colors">
                             Copy code
                           </button>
                         </div>
                       </div>
                     </div>
 
+                    {/* Card 3: Vivid Magenta */}
                     <div className="bg-slate-900 rounded-3xl border border-slate-800 overflow-hidden flex flex-col justify-between shadow-xl">
-                      <div className="p-6 bg-gradient-to-br from-red-600 to-rose-700 text-white">
+                      <div className="p-6 bg-gradient-to-br from-fuchsia-600 via-pink-600 to-rose-600 text-white">
                         <span className="text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-black/25"># Bus.com offer</span>
                         <div className="text-3xl font-black mt-4">15% OFF</div>
                         <div className="text-xs font-bold text-white/90">Weekend getaway</div>
@@ -362,7 +365,7 @@
                             <span className="text-[10px] font-black text-slate-500 block uppercase">Coupon Code</span>
                             <span className="font-mono font-black text-sm text-white">WEEKEND</span>
                           </div>
-                          <button onClick={() => navigator.clipboard?.writeText('WEEKEND')} className="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer">
+                          <button onClick={() => navigator.clipboard?.writeText('WEEKEND')} className="px-3.5 py-2 rounded-xl text-xs font-bold bg-fuchsia-600 hover:bg-fuchsia-500 text-white border border-fuchsia-500/40 cursor-pointer transition-colors">
                             Copy code
                           </button>
                         </div>

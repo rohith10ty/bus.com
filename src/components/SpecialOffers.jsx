@@ -10,8 +10,9 @@ const OFFERS = [
     description: 'Get 10% off your first intercity bus booking.',
     condition: 'Maximum discount ₹150',
     code: 'FIRSTBUS',
-    bannerGradient: 'from-emerald-700 to-teal-800',
-    accentBorder: 'border-emerald-500/30'
+    bannerGradient: 'from-blue-600 via-indigo-600 to-sky-700',
+    accentColor: 'text-sky-400',
+    buttonColor: 'bg-blue-600 hover:bg-blue-500 text-white border-blue-500/40 shadow-blue-900/30'
   },
   {
     id: 'route100',
@@ -21,8 +22,9 @@ const OFFERS = [
     description: 'Save ₹100 on an eligible bus ticket.',
     condition: 'Minimum booking ₹799',
     code: 'ROUTE100',
-    bannerGradient: 'from-violet-700 to-purple-900',
-    accentBorder: 'border-violet-500/30'
+    bannerGradient: 'from-amber-500 via-orange-500 to-amber-600',
+    accentColor: 'text-amber-400',
+    buttonColor: 'bg-amber-600 hover:bg-amber-500 text-white border-amber-500/40 shadow-amber-900/30'
   },
   {
     id: 'weekend',
@@ -32,8 +34,9 @@ const OFFERS = [
     description: 'Enjoy a discount on your next weekend trip.',
     condition: 'Maximum discount ₹200',
     code: 'WEEKEND',
-    bannerGradient: 'from-red-600 to-rose-700',
-    accentBorder: 'border-red-500/30'
+    bannerGradient: 'from-fuchsia-600 via-pink-600 to-rose-600',
+    accentColor: 'text-fuchsia-400',
+    buttonColor: 'bg-fuchsia-600 hover:bg-fuchsia-500 text-white border-fuchsia-500/40 shadow-fuchsia-900/30'
   }
 ];
 
@@ -57,11 +60,8 @@ export default function SpecialOffers() {
   return (
     <section
       id="special-offers"
-      className="relative overflow-hidden bg-slate-950 text-white py-14 sm:py-16 border-t border-slate-900"
+      className="relative pt-6 sm:pt-8 pb-16 sm:pb-20"
     >
-      {/* Subtle radial architectural lighting matching hero */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(220,38,38,0.12),transparent_50%),radial-gradient(circle_at_80%_80%,rgba(15,23,42,0.8),transparent_60%)] pointer-events-none" />
-
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
@@ -147,10 +147,10 @@ export default function SpecialOffers() {
                     <button
                       type="button"
                       onClick={() => handleCopy(offer.code)}
-                      className={`px-3.5 py-2 rounded-xl text-xs font-black inline-flex items-center gap-1.5 transition-all cursor-pointer ${
+                      className={`px-3.5 py-2 rounded-xl text-xs font-black inline-flex items-center gap-1.5 border transition-all cursor-pointer shadow-sm ${
                         isCopied
-                          ? 'bg-emerald-600 text-white shadow-md shadow-emerald-950/40'
-                          : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600'
+                          ? 'bg-emerald-600 text-white border-emerald-500 shadow-emerald-950/40'
+                          : `${offer.buttonColor}`
                       }`}
                     >
                       {isCopied ? (
@@ -160,7 +160,7 @@ export default function SpecialOffers() {
                         </>
                       ) : (
                         <>
-                          <Copy className="w-3.5 h-3.5 text-slate-400" />
+                          <Copy className="w-3.5 h-3.5 text-white/80" />
                           <span>Copy code</span>
                         </>
                       )}

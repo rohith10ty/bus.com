@@ -2,10 +2,7 @@ import { ArrowDown, Shield, Clock, Award, Compass } from 'lucide-react';
 
 export default function HeroSection({ onExploreClick }) {
   return (
-    <section className="relative overflow-hidden bg-slate-950 text-white min-h-[calc(100vh-4rem)] flex flex-col justify-between pt-6 sm:pt-8 md:pt-10 pb-6 sm:pb-8">
-      {/* Subtle architectural radial lighting (2-color theme: dark slate + red glow) */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(220,38,38,0.14),transparent_50%),radial-gradient(circle_at_80%_80%,rgba(15,23,42,0.8),transparent_60%)] pointer-events-none" />
-
+    <section className="relative min-h-[calc(100vh-4rem)] flex flex-col justify-between pt-6 sm:pt-8 md:pt-10 pb-4">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex flex-col justify-between">
         {/* Top/Middle Headline & Action Block */}
         <div className="max-w-3xl my-auto py-4 sm:py-6">

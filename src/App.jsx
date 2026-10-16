@@ -162,13 +162,12 @@ export default function App() {
       <main className="flex-1">
         {step === 'home' && (
           <>
-            {/* Cool Hero Section Showcase (Without Booking Form inside it) */}
-            <HeroSection
-              onExploreClick={scrollToBookingPortal}
-            />
-
-            {/* Special Offers Section (With the same dark background) */}
-            <SpecialOffers />
+            {/* Unified Seamless Dark Showcase Canvas (Hero + Special Offers) */}
+            <div className="bg-slate-950 text-white relative">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(220,38,38,0.14),transparent_65%)] pointer-events-none" />
+              <HeroSection onExploreClick={scrollToBookingPortal} />
+              <SpecialOffers />
+            </div>
 
             {/* Booking Portal Widget Docked Right After */}
             <BookingPortal
